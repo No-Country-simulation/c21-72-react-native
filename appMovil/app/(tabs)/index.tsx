@@ -1,70 +1,94 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { GradientBackground } from '@/components/Gradientbg';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const MenuItem = ({ icon, title }: { icon: string; title: string }) => (
+  <TouchableOpacity style={stylesMainProfile.menuItem}>
+    <View style={stylesMainProfile.iconContainer}>
+      <Ionicons name={icon as any} size={24} color="#3b5998" />
+    </View>
+    <Text style={stylesMainProfile.menuItemText}>{title}</Text>
+  </TouchableOpacity>
+);
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <GradientBackground>
+      <ScrollView style={stylesMainProfile.container}>
+        <View style={stylesMainProfile.header}>
+          <View>
+            <Text style={stylesMainProfile.greeting}>Hola Estudiante</Text>
+            <Text style={stylesMainProfile.subGreeting}>Clase XI-B | No. de lista: 04</Text>
+          </View>
+          <View style={stylesMainProfile.profileImage} />
+        </View>
+        
+        <View style={stylesMainProfile.menuGrid}>
+          <MenuItem icon="calendar" title="Eventos" />
+          <MenuItem icon="ribbon" title="Resultados" />
+          <MenuItem icon="newspaper" title="Hoja de Datos" />
+          <MenuItem icon="school" title="Asistencia" />
+          <MenuItem icon="document-text" title="Tareas" />
+          <MenuItem icon="people" title="Aula de Clases" />
+        </View>
+      </ScrollView>
+    </GradientBackground>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+export const stylesMainProfile = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 60,
+    padding: 26,
   },
-  stepContainer: {
-    gap: 8,
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  greeting: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  subGreeting: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'white',
+  },
+  menuGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  menuItem: {
+    width: '48%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  iconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'rgba(59, 89, 152, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  menuItemText: {
+    textAlign: 'center',
+    color: '#333',
+    fontSize: 12,
   },
 });
