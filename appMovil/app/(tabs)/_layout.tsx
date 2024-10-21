@@ -32,29 +32,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Results"
+        name="Parents"
         options={{
-          title: 'Resultados',
+          title: 'Padres',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'list' : 'list-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="Calendar"
-        options={{
-          title: 'Calendario',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'people' : 'people-outline'} color={color} />
           ),
         }}
       />

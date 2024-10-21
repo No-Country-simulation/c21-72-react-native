@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ImageBackground, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import Header from '@/components/Header';
 interface Asignatura {
     nombre: string;
     calificacion: number;
 }
 
-const Results: React.FC = () => {
+const Results = ({ onBack }: { onBack: () => void }) => {
     const nombreEstudiante = "nombre estudiante";
     const calificacionPromedio = 8.5;
     const grado = "A";
@@ -24,10 +24,23 @@ const Results: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+                        <Header 
+                title="Resultados" 
+                onBack={onBack} 
+                rightComponent={
+                    <TouchableOpacity>
+                        <Ionicons name="share-outline" size={24} color="#fff" />
+                    </TouchableOpacity>
+                }
+            />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.header}>
-                    <Ionicons name="arrow-back" size={24} color="#fff" />
-                    <Ionicons name="share-outline" size={24} color="#fff" />
+                    <TouchableOpacity onPress={onBack} style={styles.backButton}>
+                        <Ionicons name="arrow-back" size={24} color="#fff" />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Ionicons name="share-outline" size={24} color="#fff" />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.backgroundContainer}>
@@ -86,6 +99,9 @@ const styles = StyleSheet.create({
     },
     scrollContent: {
         flexGrow: 1,
+    },
+    backButton: {
+        padding: 10,
     },
     header: {
         flexDirection: 'row',
