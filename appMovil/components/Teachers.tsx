@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
 import Header from '@/components/Header';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -11,29 +11,35 @@ const teachersData = [
 
 export default function Teachers({ onBack }: { onBack: () => void }) {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.safeArea}>
             <Header title="Profesores" onBack={onBack} />
-            <FlatList
-                data={teachersData}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <View style={styles.teacherItem}>
-                        <View>
-                            <Text style={styles.name}>{item.name}</Text>
-                            <Text style={styles.subject}>{item.subject}</Text>
-                            <Text>{item.email}</Text>
+            <View style={styles.container}>
+                <FlatList
+                    data={teachersData}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <View style={styles.teacherItem}>
+                            <View>
+                                <Text style={styles.name}>{item.name}</Text>
+                                <Text style={styles.subject}>{item.subject}</Text>
+                                <Text>{item.email}</Text>
+                            </View>
+                            <TouchableOpacity style={styles.contactButton}>
+                                <Ionicons name="mail" size={24} color="#3b5998" />
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.contactButton}>
-                            <Ionicons name="mail" size={24} color="#3b5998" />
-                        </TouchableOpacity>
-                    </View>
-                )}
-            />
-        </View>
+                    )}
+                />
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#3b5998', // Color de fondo para el SafeAreaView
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -42,7 +48,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 10,
+        padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
     },
@@ -52,6 +58,7 @@ const styles = StyleSheet.create({
     },
     subject: {
         fontStyle: 'italic',
+        marginTop: 4,
     },
     contactButton: {
         padding: 10,

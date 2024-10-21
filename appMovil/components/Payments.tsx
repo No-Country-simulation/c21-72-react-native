@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
 import Header from '@/components/Header';
 
 const paymentsData = [
@@ -10,39 +10,45 @@ const paymentsData = [
 
 export default function Payments({ onBack }: { onBack: () => void }) {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.safeArea}>
             <Header title="Pagos" onBack={onBack} />
-            <FlatList
-                data={paymentsData}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <View style={styles.paymentItem}>
-                        <Text style={styles.concept}>{item.concept}</Text>
-                        <Text>Monto: ${item.amount}</Text>
-                        <Text>Fecha límite: {item.dueDate}</Text>
-                        <Text style={[
-                            styles.status,
-                            item.status === 'Pagado' ? styles.paid : styles.pending
-                        ]}>{item.status}</Text>
-                        {item.status === 'Pendiente' && (
-                            <TouchableOpacity style={styles.payButton}>
-                                <Text style={styles.payButtonText}>Pagar</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                )}
-            />
-        </View>
+            <View style={styles.container}>
+                <FlatList
+                    data={paymentsData}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <View style={styles.paymentItem}>
+                            <Text style={styles.concept}>{item.concept}</Text>
+                            <Text>Monto: ${item.amount}</Text>
+                            <Text>Fecha límite: {item.dueDate}</Text>
+                            <Text style={[
+                                styles.status,
+                                item.status === 'Pagado' ? styles.paid : styles.pending
+                            ]}>{item.status}</Text>
+                            {item.status === 'Pendiente' && (
+                                <TouchableOpacity style={styles.payButton}>
+                                    <Text style={styles.payButtonText}>Pagar</Text>
+                                </TouchableOpacity>
+                            )}
+                        </View>
+                    )}
+                />
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#3b5998',
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',
     },
     paymentItem: {
-        padding: 10,
+        padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
     },
@@ -52,6 +58,7 @@ const styles = StyleSheet.create({
     },
     status: {
         fontWeight: 'bold',
+        marginTop: 5,
     },
     paid: {
         color: 'green',
@@ -63,7 +70,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#3b5998',
         padding: 10,
         borderRadius: 5,
-        marginTop: 5,
+        marginTop: 10,
     },
     payButtonText: {
         color: '#fff',

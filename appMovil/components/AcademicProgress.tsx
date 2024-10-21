@@ -1,13 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, TouchableOpacity } from 'react-native';
 import Header from '@/components/Header';
 import { BarChart, LineChart } from 'react-native-chart-kit';
-import Carousel from 'react-native-snap-carousel';
 
 const screenWidth = Dimensions.get('window').width;
 
 const subjects = [
-    "Matemáticas", "Lenguaje", "Ciencias", "Historia", "Inglés", 
+    "Matemáticas", "Lenguaje", "Ciencias", "Historia", "Inglés",
     "Educación Física", "Arte", "Música", "Tecnología", "Filosofía"
 ];
 
@@ -55,6 +54,52 @@ const SubjectCard = ({ item }: { item: any }) => (
     </View>
 );
 
+const SimpleCarousel = ({ data, renderItem }: { data: any[], renderItem: (item: any) => React.ReactNode }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const scrollViewRef = useRef<ScrollView>(null);
+
+    const handleScroll = (event: any) => {
+        const contentOffset = event.nativeEvent.contentOffset;
+        const index = Math.round(contentOffset.x / screenWidth);
+        setCurrentIndex(index);
+    };
+
+    const scrollToIndex = (index: number) => {
+        scrollViewRef.current?.scrollTo({ x: index * screenWidth, animated: true });
+    };
+
+    return (
+        <View style={styles.carouselContainer}>
+            <ScrollView
+                ref={scrollViewRef}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+            >
+                {data.map((item, index) => (
+                    <View key={index} style={[styles.carouselItem, { width: screenWidth }]}>
+                        {renderItem(item)}
+                    </View>
+                ))}
+            </ScrollView>
+            <View style={styles.pagination}>
+                {data.map((_, index) => (
+                    <TouchableOpacity
+                        key={index}
+                        style={[
+                            styles.paginationDot,
+                            currentIndex === index && styles.paginationDotActive
+                        ]}
+                        onPress={() => scrollToIndex(index)}
+                    />
+                ))}
+            </View>
+        </View>
+    );
+};
+
 export default function AcademicProgress({ onBack }: { onBack: () => void }) {
     try {
         const data = {
@@ -73,9 +118,16 @@ export default function AcademicProgress({ onBack }: { onBack: () => void }) {
                     <Text style={styles.title}>Calificaciones por Asignatura</Text>
                     <View style={styles.chartContainer}>
                         <BarChart
-                            data={data}
+                            data={{
+                                labels: subjects.slice(0, 5), // Mostrar solo las primeras 5 asignaturas
+                                datasets: [
+                                    {
+                                        data: subjects.slice(0, 5).map(() => Math.random() * 9 + 1)
+                                    }
+                                ]
+                            }}
                             width={screenWidth - 40}
-                            height={220}
+                            height={300} // Aumentar la altura
                             yAxisLabel=""
                             yAxisSuffix=""
                             yAxisInterval={1}
@@ -85,19 +137,23 @@ export default function AcademicProgress({ onBack }: { onBack: () => void }) {
                                 backgroundGradientTo: '#ffa726',
                                 decimalPlaces: 1,
                                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                style: {
+                                    borderRadius: 16
+                                },
+                                barPercentage: 0.7,
                             }}
                             style={styles.chart}
+                            verticalLabelRotation={30} 
                         />
                     </View>
                     <Text style={styles.averageText}>Promedio General: 7.6</Text>
                     <Text style={styles.commentText}>Ana muestra un excelente desempeño en Inglés y Ciencias. Se recomienda reforzar Lenguaje.</Text>
-                    
+
                     <Text style={styles.title}>Rendimiento por Materia</Text>
-                    <Carousel
+                    <SimpleCarousel
                         data={subjectData}
-                        renderItem={({ item }) => <SubjectCard item={item} />}
-                        sliderWidth={screenWidth}
-                        itemWidth={screenWidth - 40}
+                        renderItem={(item) => <SubjectCard item={item} />}
                     />
                 </ScrollView>
             </SafeAreaView>
@@ -154,5 +210,29 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
         textAlign: 'center',
+    },
+    carouselContainer: {
+        height: 300, // Ajusta según tus necesidades
+        marginBottom: 20,
+    },
+    carouselItem: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    pagination: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    paginationDot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#ccc',
+        marginHorizontal: 5,
+    },
+    paginationDotActive: {
+        backgroundColor: '#3b5998',
     },
 });

@@ -59,7 +59,7 @@ export default function Parents() {
             case 'payments':
                 return <Payments onBack={goBack} />;
             case 'communications':
-                return <Communications onBack={goBack} />;
+                return <Communications onBack={goBack} onSchedule={() => slideOut('schedule')} />;
             case 'events':
                 return <Events onBack={goBack} />;
             case 'schedule':
@@ -86,7 +86,7 @@ export default function Parents() {
                 <MenuItem icon="calendar" title="Asistencia" onPress={() => slideOut('attendance')} />
                 <MenuItem icon="document-text" title="Tareas" onPress={() => slideOut('homework')} />
                 <MenuItem icon="cash" title="Pagos" onPress={() => slideOut('payments')} />
-                <MenuItem icon="chatbubbles" title="Comunicaciones" onPress={() => slideOut('communications')} />
+                {/*<MenuItem icon="chatbubbles" title="Comunicaciones" onPress={() => slideOut('communications')} />*/}
                 <MenuItem icon="calendar" title="Eventos" onPress={() => slideOut('events')} />
                 <MenuItem icon="time" title="Horario" onPress={() => slideOut('schedule')} />
                 <MenuItem icon="people" title="Profesores" onPress={() => slideOut('teachers')} />

@@ -93,9 +93,9 @@ export default function HomeScreen() {
         </View>
 
         <View style={stylesMainProfile.menuGrid}>
+          {/* ToDO unificar calendario y asistencia */}
           <MenuItem icon="calendar" title="Eventos" onPress={() => slideOut('calendar')} />
           <MenuItem icon="ribbon" title="Resultados" onPress={() => slideOut('results')} />
-          <MenuItem icon="newspaper" title="Hoja de Datos" onPress={() => slideOut('datasheet')} />
           <MenuItem icon="school" title="Asistencia" onPress={() => slideOut('attendance')} />
           <MenuItem icon="document-text" title="Tareas" onPress={() => slideOut('homework')} />
           <MenuItem icon="people" title="Aula de Clases" onPress={() => slideOut('classroom')} />

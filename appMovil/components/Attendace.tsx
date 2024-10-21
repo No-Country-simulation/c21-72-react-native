@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import Header from '@/components/Header';
 
 const attendanceData = [
@@ -12,28 +12,34 @@ const attendanceData = [
 
 export default function Attendance({ onBack }: { onBack: () => void }) {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.safeArea}>
             <Header title="Asistencia" onBack={onBack} />
-            <Text style={styles.summary}>Resumen: 80% de asistencia</Text>
-            <FlatList
-                data={attendanceData}
-                keyExtractor={(item) => item.date}
-                renderItem={({ item }) => (
-                    <View style={styles.attendanceItem}>
-                        <Text>{item.date}</Text>
-                        <Text style={[
-                            styles.status,
-                            item.status === 'Presente' ? styles.present :
-                                item.status === 'Ausente' ? styles.absent : styles.late
-                        ]}>{item.status}</Text>
-                    </View>
-                )}
-            />
-        </View>
+            <View style={styles.container}>
+                <Text style={styles.summary}>Resumen: 80% de asistencia</Text>
+                <FlatList
+                    data={attendanceData}
+                    keyExtractor={(item) => item.date}
+                    renderItem={({ item }) => (
+                        <View style={styles.attendanceItem}>
+                            <Text>{item.date}</Text>
+                            <Text style={[
+                                styles.status,
+                                item.status === 'Presente' ? styles.present :
+                                    item.status === 'Ausente' ? styles.absent : styles.late
+                            ]}>{item.status}</Text>
+                        </View>
+                    )}
+                />
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#3b5998',
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -41,12 +47,12 @@ const styles = StyleSheet.create({
     summary: {
         fontSize: 18,
         fontWeight: 'bold',
-        margin: 10,
+        margin: 16,
     },
     attendanceItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 10,
+        padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
     },

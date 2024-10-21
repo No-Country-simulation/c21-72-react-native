@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import Header from '@/components/Header';
 
 const scheduleData = {
@@ -13,31 +13,51 @@ const scheduleData = {
         { time: '9:45 - 11:15', subject: 'Inglés' },
         { time: '11:30 - 13:00', subject: 'Educación Física' },
     ],
-    // ... (agregar más días)
+    'Miércoles': [
+        { time: '8:00 - 9:30', subject: 'Química' },
+        { time: '9:45 - 11:15', subject: 'Física' },
+        { time: '11:30 - 13:00', subject: 'Biología' },
+    ],
+    'Jueves': [
+        { time: '8:00 - 9:30', subject: 'Literatura' },
+        { time: '9:45 - 11:15', subject: 'Arte' },
+        { time: '11:30 - 13:00', subject: 'Música' },
+    ],
+    'Viernes': [
+        { time: '8:00 - 9:30', subject: 'Geografía' },
+        { time: '9:45 - 11:15', subject: 'Tecnología' },
+        { time: '11:30 - 13:00', subject: 'Tutoría' },
+    ],
 };
 
 export default function Schedule({ onBack }: { onBack: () => void }) {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.safeArea}>
             <Header title="Horario" onBack={onBack} />
-            <ScrollView>
-                {Object.entries(scheduleData).map(([day, classes]) => (
-                    <View key={day} style={styles.dayContainer}>
-                        <Text style={styles.dayTitle}>{day}</Text>
-                        {classes.map((classItem, index) => (
-                            <View key={index} style={styles.classItem}>
-                                <Text style={styles.classTime}>{classItem.time}</Text>
-                                <Text style={styles.classSubject}>{classItem.subject}</Text>
-                            </View>
-                        ))}
-                    </View>
-                ))}
-            </ScrollView>
-        </View>
+            <View style={styles.container}>
+                <ScrollView>
+                    {Object.entries(scheduleData).map(([day, classes]) => (
+                        <View key={day} style={styles.dayContainer}>
+                            <Text style={styles.dayTitle}>{day}</Text>
+                            {classes.map((classItem, index) => (
+                                <View key={index} style={styles.classItem}>
+                                    <Text style={styles.classTime}>{classItem.time}</Text>
+                                    <Text style={styles.classSubject}>{classItem.subject}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    ))}
+                </ScrollView>
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#3b5998', // Color de fondo para el SafeAreaView
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -49,11 +69,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         backgroundColor: '#f0f0f0',
-        padding: 10,
+        padding: 16,
     },
     classItem: {
         flexDirection: 'row',
-        padding: 10,
+        padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
     },

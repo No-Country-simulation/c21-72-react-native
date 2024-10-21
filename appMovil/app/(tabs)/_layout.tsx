@@ -40,6 +40,24 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="teacher"
+        options={{
+          title: 'Profesor',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Director"
+        options={{
+          title: 'Director',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

@@ -82,10 +82,6 @@ const Results = ({ onBack }: { onBack: () => void }) => {
                             </View>
                         ))}
                     </View>
-
-                    <TouchableOpacity style={styles.downloadButton}>
-                        <Text style={styles.downloadButtonText}>DESCARGAR PDF</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
