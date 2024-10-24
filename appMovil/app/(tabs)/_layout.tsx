@@ -1,11 +1,21 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getUserRole = async () => {
+      const role = await AsyncStorage.getItem('userRole');
+      setUserRole(role);
+    };
+    getUserRole();
+  }, []);
 
   return (
     <Tabs
@@ -32,32 +42,47 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Parents"
+        name="Settings"
         options={{
-          title: 'Padres',
+          title: 'Configuración',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'people' : 'people-outline'} color={color} />
+            <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
           ),
         }}
       />
-      <Tabs.Screen
-        name="teacher"
-        options={{
-          title: 'Profesor',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="Director"
-        options={{
-          title: 'Director',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
-          ),
-        }}
-      />
+      {userRole === 'padre' && (
+        <Tabs.Screen
+          name="ParentProfile"
+          options={{
+            title: 'Perfil Padre',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'people' : 'people-outline'} color={color} />
+            ),
+          }}
+        />
+      )}
+      {userRole === 'profesor' && (
+        <Tabs.Screen
+          name="TeacherProfile"
+          options={{
+            title: 'Perfil Profesor',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
+            ),
+          }}
+        />
+      )}
+      {userRole === 'director' && (
+        <Tabs.Screen
+          name="DirectorProfile"
+          options={{
+            title: 'Perfil Director',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'business' : 'business-outline'} color={color} />
+            ),
+          }}
+        />
+      )}
     </Tabs>
   );
 }
