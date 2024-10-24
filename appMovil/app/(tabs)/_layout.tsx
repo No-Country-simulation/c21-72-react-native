@@ -6,9 +6,13 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TabLayout() {
+  // Hook para obtener el esquema de color
   const colorScheme = useColorScheme();
+  
+  // Hook para manejar el estado del rol del usuario
   const [userRole, setUserRole] = useState<string | null>(null);
 
+  // Hook de efecto para obtener el rol del usuario al montar el componente
   useEffect(() => {
     const getUserRole = async () => {
       const role = await AsyncStorage.getItem('userRole');
@@ -52,9 +56,9 @@ export default function TabLayout() {
       />
       {userRole === 'padre' && (
         <Tabs.Screen
-          name="ParentProfile"
+          name="ParentHome"
           options={{
-            title: 'Perfil Padre',
+            title: 'Inicio Padre',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon name={focused ? 'people' : 'people-outline'} color={color} />
             ),
@@ -63,9 +67,9 @@ export default function TabLayout() {
       )}
       {userRole === 'profesor' && (
         <Tabs.Screen
-          name="TeacherProfile"
+          name="TeacherHome"
           options={{
-            title: 'Perfil Profesor',
+            title: 'Inicio Profesor',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
             ),
@@ -74,9 +78,9 @@ export default function TabLayout() {
       )}
       {userRole === 'director' && (
         <Tabs.Screen
-          name="DirectorProfile"
+          name="DirectorHome"
           options={{
-            title: 'Perfil Director',
+            title: 'Inicio Director',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon name={focused ? 'business' : 'business-outline'} color={color} />
             ),

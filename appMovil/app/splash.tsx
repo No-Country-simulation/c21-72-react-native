@@ -11,6 +11,7 @@ import Animated, {
   Easing
 } from 'react-native-reanimated';
 import { useFonts } from 'expo-font';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 
@@ -59,7 +60,12 @@ export default function Page() {
   }
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['white', '#3b5998']}
+      style={styles.container}
+      start={{ x: 0, y: 0.01 }}
+      end={{ x: 0, y: 0.445 }}
+    >
       <Animated.View style={[styles.logoContainer, logoAnimatedStyle]}>
         <Image
           source={require('@/assets/images/Login.png')}
@@ -101,7 +107,11 @@ export default function Page() {
           <Text style={styles.buttonText}>Comenzar</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      <Image
+        source={require('@/assets/images/FooterImage.png')}
+        style={styles.footerImage}
+      />
+    </LinearGradient>
   );
 }
 
@@ -110,7 +120,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3b5998',
     padding: width * 0.05,
   },
   logoContainer: {
@@ -136,12 +145,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Eracake',
-    fontSize: width * 0.12,
+    fontSize: width * 0.14,
     color: 'white',
   },
   rotatedTwo: {
-    fontSize: width * 0.15,
-    color: '#00BFFF',
+    fontSize: width * 0.20,
+    color: '	#3DA7CB',
     marginLeft: -width * 0.02,
   },
   subtitle: {
@@ -160,5 +169,12 @@ const styles = StyleSheet.create({
     color: '#3b5998',
     fontSize: width * 0.04,
     fontWeight: 'bold',
+  },
+  footerImage: {
+    width: '100%',
+    height: height * 0.2,
+    resizeMode: 'contain',
+    position: 'absolute',
+    bottom: 0,
   },
 });
