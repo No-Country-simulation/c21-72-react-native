@@ -25,7 +25,7 @@ export default function DirectorScreen() {
     const [currentScreen, setCurrentScreen] = useState('Home');
 
     const renderScreen = () => {
-        switch(currentScreen) {
+        switch (currentScreen) {
             case 'SchoolSummary':
                 return <SchoolSummaryScreen onBack={() => setCurrentScreen('Home')} />;
             case 'Staff':
