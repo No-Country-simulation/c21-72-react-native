@@ -29,7 +29,7 @@ export default function DirectorScreen() {
             case 'SchoolSummary':
                 return <SchoolSummaryScreen onBack={() => setCurrentScreen('Home')} />;
             case 'Staff':
-                return <StaffScreen onBack={() => setCurrentScreen('Home')} />;
+                return <StaffScreen  onBack={() => setCurrentScreen('Home')} />;
             case 'Performance':
                 return <PerformanceScreen onBack={() => setCurrentScreen('Home')} />;
             case 'Finances':

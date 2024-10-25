@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface GradientProps {
     style?: ViewStyle;
@@ -19,6 +19,17 @@ export const BlueGradient = ({ style, children }: GradientProps) => (
 export const GreenRedGradient = ({ style, children }: GradientProps) => (
     <LinearGradient
         colors={['#4CAF50', '#FFC107', '#F44336']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[styles.gradient, style]}
+    >
+        {children}
+    </LinearGradient>
+);
+
+export const SkyBlueGradient = ({ style, children }: GradientProps) => (
+    <LinearGradient
+        colors={['#2855AE', '#7292CF']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[styles.gradient, style]}

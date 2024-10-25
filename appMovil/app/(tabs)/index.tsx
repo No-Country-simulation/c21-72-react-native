@@ -6,6 +6,9 @@ import Calendar from '@/components/Calendar';
 import Results from '@/components/Results';
 import Header from '@/components/Header';
 
+
+
+
 const MenuItem = ({ icon, title, onPress }: { icon: string; title: string; onPress: () => void }) => (
   <TouchableOpacity style={stylesMainProfile.menuItem} onPress={onPress}>
     <View style={stylesMainProfile.iconContainer}>
@@ -105,6 +108,8 @@ export default function HomeScreen() {
   );
 
   return (
+    
+
     <GradientBackground>
       <Animated.View style={{
         flex: 1,

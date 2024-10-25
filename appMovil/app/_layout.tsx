@@ -2,12 +2,17 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import React from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import AuthProvider from '@/presentation/providers/AuthProvider';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -16,13 +21,24 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  const queryClient = new QueryClient()
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <AuthProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            
+            <Stack.Screen name="auth/LoginScreen" />
+            <Stack.Screen name="auth/RegisterScreen" />
+
+            <Stack.Screen name="director/teacher/[teacherId]" options={{ headerShown: false }}/>
+            <Stack.Screen name="+not-found" />
+
+          </Stack>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
