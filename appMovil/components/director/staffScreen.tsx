@@ -51,7 +51,6 @@ const StaffScreen = ({onBack}: Props) => {
     const staffList = [
         { id: '1', name: 'Juan Pérez', role: 'Profesor' },
         { id: '2', name: 'María García', role: 'Administradora' },
-        // Añade más personal aquí
     ];
 
     return (

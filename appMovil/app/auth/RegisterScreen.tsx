@@ -4,9 +4,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView,
 import LogoLogin from '@/assets/images/Login.svg';
 import { ButtonLogin } from '@/components/ui/Button';
 import { RadioButton } from '@/components/ui/Radio';
+import Header from '@/components/Header';
+import { useRouter } from 'expo-router';
 
 const RegisterScreen = () => {
   const [selectedValue, setSelectedValue] = useState<number | null>(null);
+  const router = useRouter();
 
   const handleSubmit = () => {
     console.log("submit")
@@ -15,10 +18,17 @@ const RegisterScreen = () => {
   const handlePress = (value: number) => {
     setSelectedValue(value);
   };
-
+  const onBack = () => {
+    router.back();
+  };
   return (
     <SafeAreaView style={styles.container}>
+     
       <GradientBackground >
+         <Header 
+          title='Solicitar cuenta'
+          onBack={onBack}
+        />
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.containerLogo}>
             <LogoLogin width={294} height={132}/>

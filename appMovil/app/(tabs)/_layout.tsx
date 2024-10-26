@@ -1,30 +1,44 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+
 import { Role, useAuthStore } from '@/presentation/store/auth/useAuthStore';
 import { Button, View, StyleSheet, ViewStyle, Image } from 'react-native';
 import { Text } from 'react-native-svg';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from './Loader';
+
+
 export default function TabLayout() {
+  // Hook para obtener el esquema de color
   const colorScheme = useColorScheme();
   const {rol} = useAuthStore()
+  
+  // Hook para manejar el estado del rol del usuario
+  const [userRole, setUserRole] = useState<string | null>(null);
 
+  // Hook de efecto para obtener el rol del usuario al montar el componente
+  useEffect(() => {
+    const getUserRole = async () => {
+      const role = await AsyncStorage.getItem('userRole');
+      setUserRole(role);
+    };
+    getUserRole();
+  }, []);
 
+  if(userRole === null)
+    return <Loader />
 
   return (
-    <View style={{flex:1}} >
-
-  <Tabs
+    <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+      tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+      headerShown: false,
+    }}>
 
-
-      
-      {/* STUDENT */}
       <Tabs.Screen
         name="index"
         options={{
@@ -33,99 +47,74 @@ export default function TabLayout() {
             <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
           ),
         }}
-        redirect={rol !== Role.STUDENT}
+        redirect={userRole !== Role.STUDENT}
       />
-      
-      {/* Director */}
-      <Tabs.Screen
-        name="Director"
-        options={{
-          title: 'Director',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
-          ),
-        }}
-        redirect={rol !== Role.ADMIN}
-      />
-      
-
-      {/* PARENTS */}
-
+    
+    
       <Tabs.Screen
         name="Parents"
         options={{
-          title: 'Padres',
+          title: 'Inicio Padre',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'people' : 'people-outline'} color={color} />
           ),
         }}
-        redirect={rol !== Role.PARENT}
+        redirect={userRole !== Role.PARENT}
       />
-
-      <Tabs.Screen
-        name="Results"
-        options={{
-          title: 'Resultados',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'list' : 'list-outline'} color={color} />
-          ),
-        }}
-        redirect={rol !== Role.PARENT}
-      />
-
-      <Tabs.Screen
-        name="Calendar"
-        options={{
-          title: 'Calendario',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
-          ),
-        }}
-        redirect={rol !== Role.PARENT}
-
-      />
-      
-
-      {/* TEACHER */}
+    
 
       <Tabs.Screen
         name="teacher"
         options={{
-          title: 'Profesor',
+          title: 'Inicio Profesor',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
           ),
         }}
-        redirect={rol !== Role.TEACHER}
-      />
-
-      {/* All Users */}
-
-      <Tabs.Screen
-        name="Loader"
-        options={{
-         href:null
-        }}
+        redirect={userRole !== Role.TEACHER}
       />
 
 
       <Tabs.Screen
-        name="Profile"
+        name="Director"
         options={{
-          title: 'Perfil',
+          title: 'Inicio Director',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+            <TabBarIcon name={focused ? 'business' : 'business-outline'} color={color} />
           ),
         }}
-        redirect={rol === undefined}
+        redirect={userRole !== Role.DIRECTOR}
       />
-      
-      
-    </Tabs>
 
 
-    </View>
-    
+
+
+    <Tabs.Screen
+        name="Loader"
+        options={{
+          href:null
+        }}
+    />
+
+    <Tabs.Screen
+      name="Profile"
+      options={{
+        title: 'Perfil',
+        tabBarIcon: ({ color, focused }) => (
+          <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+        ),
+      }}
+    />
+    <Tabs.Screen
+      name="Settings"
+      options={{
+        title: 'Configuración',
+        tabBarIcon: ({ color, focused }) => (
+          <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
+        ),
+      }}
+    />
+  </Tabs>
   );
 }
 

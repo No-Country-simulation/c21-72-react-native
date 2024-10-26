@@ -43,7 +43,8 @@ export default function teacherId() {
 
 
   if (!teacher) {
-    return <View><Text>... cargando </Text> </View>;
+    // return <View><Text>... cargando </Text> </View>;
+    console.log("no tiene registro")
   }
 
   
@@ -89,9 +90,9 @@ export default function teacherId() {
                   onPress={onChange} 
                 />
                 <RadioButton 
-                  value={Role.ADMIN}
+                  value={Role.DIRECTOR}
                   label="Director" 
-                  selected={value === Role.ADMIN}
+                  selected={value === Role.DIRECTOR}
                   onPress={onChange} 
                 />
               </View>

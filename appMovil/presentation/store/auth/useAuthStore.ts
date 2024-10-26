@@ -1,13 +1,13 @@
 import {create} from 'zustand';
 
 import { User } from "@/domain/entities/user";
-import { AuthStatus } from "@/infrastructure/interfaces/auth.status";
 import { authCheckStatus, authLogin } from '@/actions/auth/auth';
 import { StorageAdapter } from '@/config/adapters/storage-adapter';
+import { AuthStatus } from '@/infraestructure/interfaces/auth.status';
 
 
 export enum Role {
-  ADMIN = "admin", // Director
+  DIRECTOR = "director", // Director
   TEACHER = 'profesor',
   STUDENT = 'estudiante',
   PARENT = 'padre'
@@ -20,10 +20,11 @@ export interface AuthState{
   user?:User;
   rol?:string;
 
-
   login: (email: string, password: string) => Promise<boolean>;
   checkStatus: () => Promise<void>;
+  logout: () => Promise<void>;
 }
+
 
 export const useAuthStore = create<AuthState>()((set,get) => ({
   status:'checking',
@@ -41,6 +42,7 @@ export const useAuthStore = create<AuthState>()((set,get) => ({
 
     await StorageAdapter.setItem('access_token', resp.access_token)
     await StorageAdapter.setItem('refresh_token', resp.refresh_token)
+    await StorageAdapter.setItem('userRole', resp.rol);
 
     const tok = await StorageAdapter.getItem('token')
     
@@ -50,15 +52,20 @@ export const useAuthStore = create<AuthState>()((set,get) => ({
 
   checkStatus: async () => {
     try {
-        const resp = await authCheckStatus();
-        if (!resp) {
-            set({ status: 'unauthenticated', access_token: undefined, refresh_token: undefined, user: undefined, rol: undefined });
-            return;
-        }
-        console.log(resp, "respo---")
-        set({ status: 'authenticated', access_token: resp.access_token, refresh_token: undefined, user: undefined, rol: resp.rol });
-    } catch (error) {
+      const resp = await authCheckStatus();
+      if (!resp) {
         set({ status: 'unauthenticated', access_token: undefined, refresh_token: undefined, user: undefined, rol: undefined });
+        return;
+      }
+      set({ status: 'authenticated', access_token: resp.access_token, refresh_token: resp.refresh_token, user: resp.user, rol: resp.rol });
+    } catch (error) {
+      set({ status: 'unauthenticated', access_token: undefined, refresh_token: undefined, user: undefined, rol: undefined });
     }
   },
+  logout: async () => {
+    await StorageAdapter.removeItem('access_token')
+    await StorageAdapter.removeItem('refresh_token')
+    await StorageAdapter.removeItem('userRole')
+    set({ status: 'unauthenticated', access_token: undefined, refresh_token: undefined, user: undefined, rol: undefined });
+  }
 }))

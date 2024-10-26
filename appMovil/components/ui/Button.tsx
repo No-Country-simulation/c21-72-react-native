@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+
 import React from 'react'
 import { SkyBlueGradient } from '../ColorsGradient'
 
 interface ButtonLoginProps {
     onPress?: () => void;
     IconComponent?: React.ReactNode;
-    text: String; 
+    text: String;
     disabled?: boolean;
 }
 
@@ -13,7 +14,7 @@ export const ButtonLogin = ({ onPress, IconComponent, text, disabled }: ButtonLo
     return (
         <View style={styles.container}>
             <SkyBlueGradient>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.button}
                     onPress={onPress}
                     disabled={disabled}
@@ -39,14 +40,17 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 10,
-    }, 
+    },
+
     text: {
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
+
         marginRight: 10 
     },
     forgotTex:{
+        marginRight: 10,    
         color: '#808080',
         fontSize: 14,
         textDecorationLine: 'underline'

@@ -40,3 +40,4 @@ export const authCheckStatus = async () => {
         return null;
     }
 }
+

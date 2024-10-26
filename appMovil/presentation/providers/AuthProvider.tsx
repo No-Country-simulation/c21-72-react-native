@@ -14,14 +14,14 @@ const AuthProvider = ({children}: PropsWithChildren) => {
   }, [])
 
   useEffect(() => {
-    console.log(status)
+    console.log(status, "-status ---")
 
     if (status !== 'checking'){
       if(status === 'authenticated'){
         // router.replace('/(tabs)')
 
         switch (rol) {
-          case Role.ADMIN:
+          case Role.DIRECTOR:
             router.replace('/(tabs)/Director');
             break;
           case Role.STUDENT:
@@ -34,11 +34,12 @@ const AuthProvider = ({children}: PropsWithChildren) => {
             router.replace('/(tabs)/Parents');
             break;
           default:
-            router.replace('/auth/LoginScreen');
+            router.replace('/splash');
         }
       }
       else{
-        router.replace('/auth/LoginScreen')
+        console.log("splash, ---------")
+        router.replace('/splash')
       }
     }
   },[status])

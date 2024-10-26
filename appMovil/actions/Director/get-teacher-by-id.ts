@@ -1,7 +1,7 @@
 import { connectionApi } from "@/config/api/connection";
 import { Teacher } from "@/domain/entities/teacher";
-import { TeacherResponse } from "@/infrastructure/interfaces/teacher.response";
-import { TeacherMapper } from "@/infrastructure/mappers/teacher.mapper";
+import { TeacherResponse } from "@/infraestructure/interfaces/teacher.response";
+import { TeacherMapper } from "@/infraestructure/mappers/teacher.mapper";
 
 const emptyTeacher: Teacher = {
   id: '',

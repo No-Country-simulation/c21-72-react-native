@@ -1,8 +1,6 @@
-declare module '@env' {
-    
-    export const STAGE: string;
-    
-    export const API_URL: string;
-    export const API_URL_IOS: string;
-    export const API_URL_ANDROID: string;
+
+import { EnvType } from "@/config/env";
+
+declare global {
+  const ENV: EnvType;
 }

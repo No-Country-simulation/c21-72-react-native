@@ -1,7 +1,7 @@
 import { connectionApi } from "@/config/api/connection"
 import { Teacher } from "@/domain/entities/teacher"
-import { TeacherResponse } from "@/infrastructure/interfaces/teacher.response"
-import { TeacherMapper } from "@/infrastructure/mappers/teacher.mapper"
+import { TeacherResponse } from "@/infraestructure/interfaces/teacher.response"
+import { TeacherMapper } from "@/infraestructure/mappers/teacher.mapper"
 
 export const getTeacherByPage = async (page: number, limit: number = 10): Promise<Teacher[]> =>{
     try {
