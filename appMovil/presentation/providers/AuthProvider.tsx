@@ -14,8 +14,6 @@ const AuthProvider = ({children}: PropsWithChildren) => {
   }, [])
 
   useEffect(() => {
-    console.log(status, "-status ---")
-
     if (status !== 'checking'){
       if(status === 'authenticated'){
         // router.replace('/(tabs)')
@@ -38,7 +36,6 @@ const AuthProvider = ({children}: PropsWithChildren) => {
         }
       }
       else{
-        console.log("splash, ---------")
         router.replace('/splash')
       }
     }

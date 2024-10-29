@@ -45,6 +45,8 @@ export default function RootLayout() {
             <Stack.Screen name="auth/RegisterScreen" options={{ headerShown: false }} /> */}
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="director/teacher/[teacherId]" options={{ headerShown: false }}/>
+            <Stack.Screen name="director/student/[AddFamilyMember]" options={{ headerShown: false }}/>
+
             <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
           </Stack>
         </AuthProvider>

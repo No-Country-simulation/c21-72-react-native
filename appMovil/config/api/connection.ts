@@ -13,7 +13,8 @@ import { Platform } from "react-native";
 //     : ENV.API_URL_ANDROID;
 
 // En su lugar, usa una URL hardcodeada temporalmente
-export const API_URL = "https://tu-api-temporal.com";
+// export const API_URL = "https://tu-api-temporal.com";
+export const API_URL = "http://192.168.0.6:3000/api";
 const connectionApi = axios.create({
   baseURL: API_URL,
   headers: {

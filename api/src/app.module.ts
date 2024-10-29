@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { PersonModule } from './person/person.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { TeacherModule } from './teacher/teacher.module';
+import { StudentModule } from './student/student.module';
+import { ResponsibleModule } from './responsible/responsible.module';
 
 
 @Module({
@@ -43,6 +45,8 @@ import { TeacherModule } from './teacher/teacher.module';
     AuthModule,
     PersonModule,
     TeacherModule,
+    StudentModule,
+    ResponsibleModule,
   ],
   controllers: [],
   providers: [],

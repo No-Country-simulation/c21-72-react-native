@@ -3,9 +3,10 @@ import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from './entities/person.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { TeacherService } from 'src/teacher/teacher.service';
+import { FamilyMemberDto } from 'src/student/dto/create-student.dto';
 
 @Injectable()
 export class PersonService {
@@ -79,6 +80,24 @@ export class PersonService {
     
 
     return {person, status: 200, message: 'Padre creado exitosamente'}
+  }
+
+  async createFamily(
+    { personId,full_name,last_name,email_address,address,male}: FamilyMemberDto,
+    manager: EntityManager
+  ) {  
+    const person = manager.create(Person,{
+      id: personId,
+      full_name,
+      last_name, 
+      email_address, 
+      address,
+      male,
+      userId: null
+    });
+
+    await manager.save(person)
+    return person;
   }
 
   findAll() {

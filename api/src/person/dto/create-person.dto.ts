@@ -14,7 +14,7 @@ export class CreatePersonDto {
     last_name: string;
     
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     email_address: string;
 
     @IsString()

@@ -1,4 +1,5 @@
 import { Person } from "src/person/entities/person.entity";
+import { Student } from "src/student/entities/student.entity";
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToOne } from "typeorm";
 
 @Entity()
@@ -20,6 +21,9 @@ export class User {
 
     @OneToOne(() => Person, person => person.user, { nullable: true })
     person: Person;
+
+    @OneToOne(() => Student, student => student.user, { nullable: true })
+    user: User;
 
     @DeleteDateColumn() // decorador para eliminar un usuario de forma logica
     deleteAt: Date;

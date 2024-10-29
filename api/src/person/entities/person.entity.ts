@@ -1,5 +1,6 @@
+import { Responsible } from "src/responsible/entities/responsible.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, Unique } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, Unique } from "typeorm";
 
 @Entity()
 export class Person {
@@ -12,7 +13,7 @@ export class Person {
     @Column()
     last_name: string;
 
-    @Column({unique: true,nullable: false})
+    @Column({unique: true, nullable: true})
     email_address: string;
 
     @Column()
@@ -30,4 +31,8 @@ export class Person {
 
     @DeleteDateColumn() // decorador para eliminar un usuario de forma logica
     deleteAt: Date;
+
+    @OneToMany(() => Responsible, (studentPerson) => studentPerson.person)
+    responsibles: Responsible[];
+
 }

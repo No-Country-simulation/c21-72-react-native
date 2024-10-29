@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { GradientBackground } from '@/components/Gradientbg';
@@ -11,6 +11,7 @@ import EventsScreen from '@/components/director/events';
 import SettingsScreen from '@/components/director/settings';
 import CommunicationsScreen from '@/components/director/comms';
 import ReportsScreen from '@/components/director/reports';
+import StudentScreen from '@/components/director/studentScreen';
 
 const MenuItem = ({ icon, title, onPress }: { icon: string; title: string; onPress: () => void }) => (
     <TouchableOpacity style={stylesMainProfile.menuItem} onPress={onPress}>
@@ -42,6 +43,8 @@ export default function DirectorScreen() {
                 return <CommunicationsScreen onBack={() => setCurrentScreen('Home')} />;
             case 'Reports':
                 return <ReportsScreen onBack={() => setCurrentScreen('Home')} />;
+            case 'Students':
+                return <StudentScreen onBack={() => setCurrentScreen('Home')}/>
             default:
                 return (
                     <ScrollView style={stylesMainProfile.container}>
@@ -58,6 +61,7 @@ export default function DirectorScreen() {
                             <MenuItem icon="calendar" title="Eventos" onPress={() => setCurrentScreen('Events')} />
                             <MenuItem icon="chatbubbles" title="Comunicaciones" onPress={() => setCurrentScreen('Communications')} />
                             <MenuItem icon="document-text" title="Informes" onPress={() => setCurrentScreen('Reports')} />
+                            <MenuItem icon="people" title="Estudiantes" onPress={() => setCurrentScreen('Students')} />
                         </View>
                     </ScrollView>
                 );

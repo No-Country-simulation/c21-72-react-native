@@ -34,9 +34,6 @@ export default function teacherId() {
       queryClient.invalidateQueries({queryKey: ['teachers', 'infinite']});
       queryClient.invalidateQueries({queryKey: ['teacher', data.id]});
       router.back();
-
-
-      
     }
   })
 
