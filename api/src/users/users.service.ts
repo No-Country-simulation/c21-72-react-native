@@ -30,6 +30,32 @@ export class UsersService {
     private readonly mailerService: MailerService,
   ){}
 
+
+
+  async createAdminIfNotExists() {
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@demo.com';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'pass1234';
+
+    const existingAdmin = await this.userRepository.findOne({ where: { email: adminEmail } });
+    const name = 'director'
+
+    if (!existingAdmin) {
+      const hashedPassword = await bcryptjs.hash(adminPassword, 10);
+      const admin = this.userRepository.create({
+        name: name,
+        email: adminEmail,
+        password: hashedPassword,
+        rol: 'director',
+      });
+      await this.userRepository.save(admin);
+      // this.logger.log('Admin user created with email:', adminEmail);
+    } else {
+      console.log('Ya existe')
+      // this.logger.log('Admin user already exists');
+    }
+  }
+
+
   create(createUserDto: CreateUserDto) {
     return this.userRepository.save(createUserDto)
   }
