@@ -1,16 +1,15 @@
-version: '3.8'
-name: code_service
-services:
-  app:
-    build:
-      context: .
-      dockerfile: deployment/image/Dockerfile_api
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-    environment:
-      - TZ=America/Caracas
-    env_file:
-      - .env
-    restart: always
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start:prod"]
