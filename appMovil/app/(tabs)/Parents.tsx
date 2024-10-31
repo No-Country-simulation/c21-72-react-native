@@ -11,6 +11,8 @@ import Communications from '@/components/Communications';
 import Events from '@/components/Events';
 import Schedule from '@/components/ScheduleParents';
 import Teachers from '@/components/Teachers';
+import { useAuthStore } from '@/presentation/store/auth/useAuthStore';
+
 
 const MenuItem = ({ icon, title, onPress }: { icon: string; title: string; onPress: () => void }) => (
     <TouchableOpacity style={styles.menuItem} onPress={onPress}>
@@ -24,6 +26,7 @@ const MenuItem = ({ icon, title, onPress }: { icon: string; title: string; onPre
 export default function Parents() {
     const [activeView, setActiveView] = useState<string>('home');
     const [slideAnim] = useState(new Animated.Value(0));
+    const {user} =  useAuthStore()
 
     const slideOut = (nextView: string) => {
         Animated.timing(slideAnim, {
@@ -67,15 +70,16 @@ export default function Parents() {
             case 'teachers':
                 return <Teachers onBack={goBack} />;
             default:
-                return renderHomeView();
+                return renderHomeView(user?.name);
         }
     };
 
-    const renderHomeView = () => (
+    const renderHomeView = (user: any) => (
+        
         <ScrollView style={styles.container}>
             <View style={styles.header}>
                 <View>
-                    <Text style={styles.greeting}>Bienvenidos, Familia García</Text>
+                    <Text style={styles.greeting}>Bienvenidos, {user}</Text>
                     <Text style={styles.subGreeting}>Padre/Madre de Ana García</Text>
                 </View>
                 <View style={styles.profileImage} />

@@ -41,7 +41,7 @@ export class PersonService {
 
     await this.personRepository.save(person)
 
-    const username = `${person.full_name}  ${person.last_name}`
+    const username = `${person.full_name} ${person.last_name}`
 
     //Registrar el usuario
     //Rol si es maestro teacher

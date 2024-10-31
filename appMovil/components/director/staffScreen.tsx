@@ -22,11 +22,11 @@ const StaffScreen = ({onBack}: Props) => {
     const navigation = useNavigation();
 
     const {isLoading, data, fetchNextPage, hasNextPage} = useInfiniteQuery({
-         queryKey: ['teachers', 'infinite'],
-         staleTime: 1000 * 60 * 60, // 1 hour
-         initialPageParam: 0,
+        queryKey: ['teachers', 'infinite'],
+        staleTime: 1000 * 60 * 60, // 1 hour
+        initialPageParam: 0,
     
-         queryFn: async (params) => {
+        queryFn: async (params) => {
             console.log(params, "paramsssss")
             const teachers = await getTeacherByPage(params.pageParam)
             return teachers;

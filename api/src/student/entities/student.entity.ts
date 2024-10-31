@@ -17,7 +17,7 @@ export class Student {
     admission_number: string;
 
     @Column()
-    academic_year: string;
+    academic_year: number;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     date_of_admission: Date; 
@@ -29,10 +29,13 @@ export class Student {
     address: string;
 
     @Column()
-    programa: string;
+    grado: string;
 
     @Column()
     salon: string;
+
+    @Column({default: 'pendiente'}) // solicitado, creado // para saber si una familiar esta solicitando una cuenta
+    account: string;
 
     @OneToOne(() => User, { nullable: true })
     @JoinColumn()
@@ -43,4 +46,5 @@ export class Student {
 
     @OneToMany(() => Responsible, (studentPerson) => studentPerson.student)
     responsibles: Responsible[];
+
 }

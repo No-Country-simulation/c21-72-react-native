@@ -28,6 +28,8 @@ export class StudentService {
   async create(createStudentDto: CreateStudentDto): Promise<Student> {
     const {family, ...studentData} = createStudentDto;
 
+    console.log("create student ---")
+
     const queryRunner = this.dataSoruce.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -51,7 +53,8 @@ export class StudentService {
         await queryRunner.manager.save(responsibles);
       }
 
-      if (studentData.email_address !== null){
+      if (studentData.email_address){
+        
         const username = `${studentData.full_name}  ${studentData.last_name}`
         //Cuando es de tipo teacher guardar
         const user = await this.userService.createUser(username,studentData.email_address, 'estudiante')

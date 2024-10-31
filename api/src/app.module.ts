@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { TodoModule } from './todo/todo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
@@ -9,6 +9,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { TeacherModule } from './teacher/teacher.module';
 import { StudentModule } from './student/student.module';
 import { ResponsibleModule } from './responsible/responsible.module';
+import { DirectorModule } from './director/director.module';
+import { UsersService } from './users/users.service';
 
 
 @Module({
@@ -28,12 +30,12 @@ import { ResponsibleModule } from './responsible/responsible.module';
     }),
     MailerModule.forRoot({
       transport: {
-        host: 'sandbox.smtp.mailtrap.io',
-        port: 587,
+        host: process.env.DB_HOST_EMAIL,        
+        port: process.env.DB_PORT_EMAIL,
         secure: false,
         auth: {
-          user:'b41ae4a1d74240',
-          pass: 'c687364b3b208d'
+          user:process.env.DB_USER_EMAIL,
+          pass: process.env.DB_PASS_EMAIL
         },
       },
       defaults: {
@@ -47,8 +49,15 @@ import { ResponsibleModule } from './responsible/responsible.module';
     TeacherModule,
     StudentModule,
     ResponsibleModule,
+    DirectorModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  constructor(private readonly userService: UsersService) {}
+
+  async onModuleInit() {
+    await this.userService.createAdminIfNotExists();
+  }
+}

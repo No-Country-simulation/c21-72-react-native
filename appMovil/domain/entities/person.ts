@@ -5,5 +5,6 @@ export interface Person{
     email_address: string;
     male: string;
     address: string;
-    type: string /// tipo familiar
+    account: string;
+    userId?: number;
 }

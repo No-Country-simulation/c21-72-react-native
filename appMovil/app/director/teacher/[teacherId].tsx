@@ -44,17 +44,11 @@ export default function teacherId() {
     console.log("no tiene registro")
   }
 
-  
-
-  // const onSubmit = (data:Teacher) => {  
-  //   mutation.mutate(data)
-  // };
-
   const onSubmit = async (data: Teacher) => {  
-    setLoading(true); // Iniciar loading
+    setLoading(true); 
     mutation.mutate(data, {
       onSettled: () => {
-        setLoading(false); // Terminar loading
+        setLoading(false);
       }
     });
   };

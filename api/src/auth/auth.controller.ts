@@ -49,8 +49,6 @@ export class AuthController {
         return {user: req.user, access_token: req.token, rol: req.rol};
     }
 
-
-
     @Get('profile')
     @UseGuards(AuthGuard)
     profile(@Request() req,){

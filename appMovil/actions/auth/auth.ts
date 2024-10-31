@@ -1,10 +1,12 @@
 import { connectionApi } from "@/config/api/connection"
 import { User } from "@/domain/entities/user"
-import type { AuthResponse } from "@/infrastructure/interfaces/auth.responses"
+import { AuthResponse } from "@/infraestructure/interfaces/auth.responses"
+// import type { AuthResponse } from "@/infrastructure/interface/auth.responses"
 
 const returnUserToken = (data: AuthResponse) => {
     const user: User ={
-        email: data.email,
+        email: data.user.email,
+        name: data.user.name
     }
 
     return {
