@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { 
   useSharedValue, 
@@ -12,8 +12,55 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 
 const { width, height } = Dimensions.get('window');
+
+const GradientText = ({ style, twoAnimatedStyle }: { style: any, twoAnimatedStyle: any }) => {
+  return (
+    <MaskedView
+      style={{ 
+        height: width * 0.25, 
+        width: width * 0.25,
+        position: 'absolute',
+        right: -width * 0.16,  // Ajustado más a la derecha
+        bottom: -height * 0.01,
+        zIndex: 1, // Asegura que esté por encima
+      }}
+      maskElement={
+        <Animated.Text 
+          style={[
+            style,
+            twoAnimatedStyle,
+            {
+              fontSize: width * 0.25,
+              color: 'white',
+              textAlign: 'center',
+            }
+          ]}>
+          2
+        </Animated.Text>
+      }>
+      <LinearGradient
+        colors={['#4facfe', '#00f2fe', '#0099ff']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ flex: 1, backgroundColor: 'transparent' }}>
+        <Text style={[style, { 
+          opacity: 1,
+          fontSize: width * 0.25,
+          color: '#4facfe',
+          textAlign: 'center',
+          textShadowColor: 'rgba(0, 0, 0, 0.2)',
+          textShadowOffset: { width: 1, height: 1 },
+          textShadowRadius: 3,
+        }]}>
+          2
+        </Text>
+      </LinearGradient>
+    </MaskedView>
+  );
+};
 
 export default function Page() {
   const router = useRouter();
@@ -26,7 +73,29 @@ export default function Page() {
     'Eracake': require('../assets/fonts/Eracake.ttf'),
   });
 
+  // Crear todos los estilos animados fuera del render
+  const logoAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: logoTranslateX.value }],
+    opacity: logoOpacity.value,
+  }));
+
+  // Crear los estilos de las letras
+  const letterAnimatedStyles = letterAnimations.map((anim) =>
+    useAnimatedStyle(() => ({
+      transform: [{ translateY: anim.value }],
+    }))
+  );
+
+  // Crear el estilo del número 2
+  const twoAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: twoAnimation.value },
+      { rotate: '20deg' },
+    ],
+  }));
+
   useEffect(() => {
+    // Animaciones existentes...
     logoTranslateX.value = withSequence(
       withTiming(40, { duration: 500, easing: Easing.inOut(Easing.ease) }),
       withTiming(0, { duration: 500, easing: Easing.inOut(Easing.ease) })
@@ -44,16 +113,14 @@ export default function Page() {
       700,
       withSpring(0, { damping: 5, stiffness: 100 })
     );
+
+    // Agregar navegación automática
+    const timer = setTimeout(() => {
+      router.replace('/auth/LoginScreen');
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
-
-  const logoAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: logoTranslateX.value }],
-    opacity: logoOpacity.value,
-  }));
-
-  const handleNext = () => {
-    router.push('/auth/LoginScreen');
-  };
 
   if (!fontsLoaded) {
     return null;
@@ -77,35 +144,17 @@ export default function Page() {
           {'CONECTA'.split('').map((letter, index) => (
             <Animated.Text
               key={index}
-              style={[
-                styles.title,
-                useAnimatedStyle(() => ({
-                  transform: [{ translateY: letterAnimations[index].value }],
-                })),
-              ]}
+              style={[styles.title, letterAnimatedStyles[index]]}
             >
               {letter}
             </Animated.Text>
           ))}
-          <Animated.Text
-            style={[
-              styles.title,
-              styles.rotatedTwo,
-              useAnimatedStyle(() => ({
-                transform: [
-                  { translateY: twoAnimation.value },
-                  { rotate: '20deg' },
-                ],
-              })),
-            ]}
-          >
-            2
-          </Animated.Text>
+          <GradientText 
+            style={[styles.title, styles.rotatedTwo]} 
+            twoAnimatedStyle={twoAnimatedStyle}
+          />
         </View>
         <Text style={styles.subtitle}>Bienvenido a tu app escolar</Text>
-        <TouchableOpacity style={styles.button} onPress={handleNext}>
-          <Text style={styles.buttonText}>Comenzar</Text>
-        </TouchableOpacity>
       </View>
       <Image
         source={require('@/assets/images/FooterImage.png')}
@@ -142,6 +191,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: height * 0.02,
+    position: 'relative', // Añade esta línea
   },
   title: {
     fontFamily: 'Eracake',
@@ -149,9 +199,9 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   rotatedTwo: {
-    fontSize: width * 0.20,
-    color: '	#3DA7CB',
-    marginLeft: -width * 0.02,
+    fontFamily: 'Eracake',
+    color: 'white',
+    transform: [{ rotate: '20deg' }],
   },
   subtitle: {
     fontSize: width * 0.04,

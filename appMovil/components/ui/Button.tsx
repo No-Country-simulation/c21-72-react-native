@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+
 import React from 'react'
 import { SkyBlueGradient } from '../ColorsGradient'
 
@@ -40,13 +41,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 10,
     },
+
     text: {
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-        marginRight: 10
+
+        marginRight: 10 
     },
-    forgotTex: {
+    forgotTex:{
+        marginRight: 10,    
         color: '#808080',
         fontSize: 14,
         textDecorationLine: 'underline'

@@ -1,13 +1,14 @@
 import { Pressable, View, Text, StyleSheet } from "react-native";
 
 interface RadioButtonProps {
-    value: number;          // Valor que se asigna al botón
+    value: number | string;          // Valor que se asigna al botón
     label: string;          // Texto a mostrar
     selected: boolean;      // Indica si el botón está seleccionado
-    onPress?: (value: number) => void; // Función de callback al presionar
+    onPress?: (value: number | string) => void; // Función de callback al presionar
+    disabled?: boolean;
 }
 
-export const RadioButton = ({ value, label, selected, onPress }: RadioButtonProps) => {
+export const RadioButton = ({ value, label, selected, onPress, disabled }: RadioButtonProps) => {
     const handleOnPress = () => {
         if (onPress) {
             onPress(value); // Llama a la función onPress con el valor correspondiente
@@ -15,13 +16,10 @@ export const RadioButton = ({ value, label, selected, onPress }: RadioButtonProp
     };
 
     return (
-        <Pressable onPress={handleOnPress}>
+        <Pressable onPress={handleOnPress} disabled={disabled}>
             <View style={styles.wrap}>
                 <Dot selected={selected} />
-                <View>
-                    <Text style={styles.label}>{label}</Text>
-
-                </View>
+                <Text style={styles.label}>{label}</Text>
             </View>
         </Pressable>
     );

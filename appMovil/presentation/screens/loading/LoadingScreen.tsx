@@ -4,7 +4,7 @@ import React from 'react'
 const LoadingScreen = () => {
     return (
         <View>
-            <Text>LoadingScreen</Text>
+            <Text>no hay información</Text>
         </View>
     )
 }
