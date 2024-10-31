@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Switch, Button } from 'react-native';
 import Header from '@/components/Header';
+import { useAuthStore } from '@/presentation/store/auth/useAuthStore';
 
 export default function Settings({ onBack }: { onBack: () => void }) {
+    const {logout} = useAuthStore();
     const [isDarkMode, setIsDarkMode] = React.useState(false);
 
     const toggleDarkMode = () => {
@@ -27,6 +29,13 @@ export default function Settings({ onBack }: { onBack: () => void }) {
                         onPress={() => {
                             // Lógica para cambiar la contraseña
                         }}
+                    />
+                </View>
+                {/*Logout*/}
+                <View style={styles.option}>
+                    <Button
+                        title="Cerrar sesion"
+                        onPress={logout}
                     />
                 </View>
                 {/* Agrega aquí más opciones de configuración */}

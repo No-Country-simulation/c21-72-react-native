@@ -5,6 +5,10 @@ import { GradientBackground } from '@/components/Gradientbg';
 import Calendar from '@/components/Calendar';
 import Results from '@/components/Results';
 import Header from '@/components/Header';
+import { useAuthStore } from '@/presentation/store/auth/useAuthStore';
+
+
+
 
 const MenuItem = ({ icon, title, onPress }: { icon: string; title: string; onPress: () => void }) => (
   <TouchableOpacity style={stylesMainProfile.menuItem} onPress={onPress}>
@@ -18,6 +22,9 @@ const MenuItem = ({ icon, title, onPress }: { icon: string; title: string; onPre
 export default function HomeScreen() {
   const [activeView, setActiveView] = useState<'home' | 'calendar' | 'results' | 'datasheet' | 'attendance' | 'homework' | 'classroom'>('home');
   const [slideAnim] = useState(new Animated.Value(0));
+  const {user} =  useAuthStore()
+
+  console.log(user)
 
   const slideIn = () => {
     Animated.timing(slideAnim, {
@@ -105,6 +112,8 @@ export default function HomeScreen() {
   );
 
   return (
+    
+
     <GradientBackground>
       <Animated.View style={{
         flex: 1,

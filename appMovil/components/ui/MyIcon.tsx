@@ -1,7 +1,6 @@
 import { type IconProps } from '@expo/vector-icons/build/createIconSet';
 
 import { StyleSheet } from 'react-native';
-// import {Icon, useTheme} from '@ui-kitten/components';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ComponentProps } from 'react';
 interface Props {

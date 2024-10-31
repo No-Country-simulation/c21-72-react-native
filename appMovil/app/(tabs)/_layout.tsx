@@ -3,11 +3,19 @@ import React, { useEffect, useState } from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+
+import { Role, useAuthStore } from '@/presentation/store/auth/useAuthStore';
+import { Button, View, StyleSheet, ViewStyle, Image } from 'react-native';
+import { Text } from 'react-native-svg';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from './Loader';
+
 
 export default function TabLayout() {
   // Hook para obtener el esquema de color
   const colorScheme = useColorScheme();
+  const {rol} = useAuthStore()
   
   // Hook para manejar el estado del rol del usuario
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -21,12 +29,16 @@ export default function TabLayout() {
     getUserRole();
   }, []);
 
+  if(userRole === null)
+    return <Loader />
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+      tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+      headerShown: false,
+    }}>
+
       <Tabs.Screen
         name="index"
         options={{
@@ -35,58 +47,103 @@ export default function TabLayout() {
             <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
           ),
         }}
+        redirect={userRole !== Role.STUDENT}
       />
+    
+    
       <Tabs.Screen
-        name="Profile"
+        name="Parents"
         options={{
-          title: 'Perfil',
+          title: 'Inicio Padre',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+            <TabBarIcon name={focused ? 'people' : 'people-outline'} color={color} />
           ),
         }}
+        redirect={userRole !== Role.PARENT}
       />
+    
+
       <Tabs.Screen
-        name="Settings"
+        name="teacher"
         options={{
-          title: 'Configuración',
+          title: 'Inicio Profesor',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
+            <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
           ),
         }}
+        redirect={userRole !== Role.TEACHER}
       />
-      {userRole === 'padre' && (
-        <Tabs.Screen
-          name="ParentHome"
-          options={{
-            title: 'Inicio Padre',
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'people' : 'people-outline'} color={color} />
-            ),
-          }}
-        />
-      )}
-      {userRole === 'profesor' && (
-        <Tabs.Screen
-          name="TeacherHome"
-          options={{
-            title: 'Inicio Profesor',
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
-            ),
-          }}
-        />
-      )}
-      {userRole === 'director' && (
-        <Tabs.Screen
-          name="DirectorHome"
-          options={{
-            title: 'Inicio Director',
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'business' : 'business-outline'} color={color} />
-            ),
-          }}
-        />
-      )}
-    </Tabs>
+
+
+      <Tabs.Screen
+        name="Director"
+        options={{
+          title: 'Inicio Director',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'business' : 'business-outline'} color={color} />
+          ),
+        }}
+        redirect={userRole !== Role.DIRECTOR}
+      />
+
+
+
+
+    <Tabs.Screen
+        name="Loader"
+        options={{
+          href:null
+        }}
+    />
+
+    <Tabs.Screen
+      name="Profile"
+      options={{
+        title: 'Perfil',
+        tabBarIcon: ({ color, focused }) => (
+          <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+        ),
+      }}
+    />
+    <Tabs.Screen
+      name="Settings"
+      options={{
+        title: 'Configuración',
+        tabBarIcon: ({ color, focused }) => (
+          <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
+        ),
+      }}
+    />
+  </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  logoutContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: '50%',
+    transform: [{ translateX: -50 }],
+  },
+  container:{
+    flex:1,
+  },
+  contentContainer:{
+    backgroundColor: '#0F56B3',
+    position: 'absolute',
+    bottom: 60,
+    right: 20,
+    borderRadius: 50
+  },
+  iconContainer: {
+    width:50,
+    height:50,
+    justifyContent: 'center',
+    alignItems:'center'
+  },
+  icon:{
+    width:26,
+    height:26
+  }
+
+});

@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { MyIcon } from '@/components/ui/MyIcon';
 import { useAuthStore } from '@/presentation/store/auth/useAuthStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Header from '@/components/Header';
 
 const { width, height } = Dimensions.get('window');
 
@@ -53,10 +54,16 @@ export const LoginScreen = () => {
 const handleRegister = () => {
     router.push('/auth/RegisterScreen');
 }
-
+const onBack = () => {
+    router.back();
+};
 return (
     <GestureHandlerRootView style={styles.container}>
         <GradientBackground>
+            <Header 
+                title='Solicitar cuenta'
+                onBack={onBack}
+            />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.containerLogo}>
                     <Image
