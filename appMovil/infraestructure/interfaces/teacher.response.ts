@@ -12,5 +12,7 @@ export interface PersonResponse {
     email_address:   string;
     address:        string;
     male:           string;
+    account:        string;
     deleteAt?:      Date;
+    userId?:        number;
 }

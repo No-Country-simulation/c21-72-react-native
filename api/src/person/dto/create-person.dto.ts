@@ -24,6 +24,10 @@ export class CreatePersonDto {
     @IsString()
     @IsNotEmpty()
     male: string
+
+    @IsString()
+    @IsOptional()
+    account: string
     
     @IsOptional()
     deleteAt: Date;

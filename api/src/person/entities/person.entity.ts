@@ -22,6 +22,9 @@ export class Person {
     @Column({nullable: false})
     male: string;
 
+    @Column({default: 'pendiente'}) // solicitado, creado // para saber si una familiar esta solicitando una cuenta
+    account: string;
+
     @OneToOne(() => User, { nullable: true })
     @JoinColumn()
     user: User | null;

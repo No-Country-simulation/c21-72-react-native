@@ -7,6 +7,12 @@ import { Repository } from 'typeorm';
 import { randomBytes } from 'crypto';
 import { MailerService } from '@nestjs-modules/mailer';
 import * as bcryptjs from 'bcryptjs';
+import { CreateUserParentDto } from './dto/create-user-parent.dto';
+import { Person } from 'src/person/entities/person.entity';
+import { Responsible } from 'src/responsible/entities/responsible.entity';
+import { Student } from 'src/student/entities/student.entity';
+import { RequestUserParentDto } from './dto/request-user-parent.dto';
+
 
 @Injectable()
 export class UsersService {
@@ -14,6 +20,13 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Person)
+    private readonly personRepository: Repository<Person>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
+    
+    @InjectRepository(Responsible)
+    private readonly responsibleRepository: Repository<Responsible>,
     private readonly mailerService: MailerService,
   ){}
 
@@ -43,6 +56,108 @@ export class UsersService {
     // Enviar el correo con la contraseña generada automaticamente
 
 
+  }
+
+  async requestUserParent(createUserParentDto : RequestUserParentDto){
+    
+    const personId = createUserParentDto.personId
+    const student  = await this.studentRepository.findOneBy({admission_number: createUserParentDto.admission_number })
+
+    console.log(student, "student")
+
+    if (!student) {
+      return "Estudiante no encontrado";
+    }
+
+    if(personId){
+      const person = await this.personRepository.findOneBy({id: personId }) 
+      if (!person) 
+        return "Persona no encontrada";
+
+      if(person.account === "creado")
+        return "Usted ya tiene una cuenta registrada en la App"
+      
+      const responsible = await this.responsibleRepository.findOne({
+        where: {
+          person: {id: personId}, 
+          student: {id: student.id}
+        }
+      })
+
+      if(!responsible){
+        return "Ingrese datos correctos"
+      }
+
+      //Se actualiza el email y estado de la cuenta a creada de la persona y se crea el usuario
+      const name = `${person.full_name} ${person.last_name}`
+      // const user = await this.createUser(name, createUserParentDto.email, "padre");
+
+      // Object.assign(person, {userId: user.id, email_addres: createUserParentDto.email, account: "creado"})
+      
+      Object.assign(person, {email_address: createUserParentDto.email, account: "solicitado"})
+      await this.personRepository.save(person)
+
+      return person
+    }
+
+    
+
+    // Crear cuando es de tipo estudiante
+    if(student.account === "creado")
+      return "Usted ya tiene una cuenta registrada en la App"
+
+
+    // const name = `${student.full_name} ${student.last_name}`
+    // const user = await this.createUser(name, createUserParentDto.email, "estudiante");
+
+    // Object.assign(student, {userId: user.id, email_addres: createUserParentDto.email, account: "creado"})
+
+    const email= createUserParentDto.email;
+    Object.assign(student, {email_address: email, account: "solicitado"})
+    await this.studentRepository.save(student)
+
+    return student
+  }
+
+  async createUserParent(createUserParentDto : CreateUserParentDto){
+    
+    const personId = createUserParentDto.personId
+    const student  = await this.studentRepository.findOneBy({admission_number: createUserParentDto.admission_number })
+
+    if (!student) {
+      return "Estudiante no encontrado";
+    }
+
+    if(personId){
+      const person = await this.personRepository.findOneBy({id: personId }) 
+      if (!person) 
+        return "Persona no encontrada";
+
+      if(person.account === "creado")
+        return "Usted ya tiene una cuenta registrada en la App"
+
+      //Se actualiza el email y estado de la cuenta a creada de la persona y se crea el usuario
+      const name = `${person.full_name} ${person.last_name}`
+      const user = await this.createUser(name, createUserParentDto.email_address, "padre");
+
+      Object.assign(person, {userId: user.id, email_address: createUserParentDto.email_address, account: "creado"})
+      await this.personRepository.save(person)
+
+      return person
+    }
+
+    // Crear cuando es de tipo estudiante
+    if(student.account === "creado")
+      return "Usted ya tiene una cuenta registrada en la App"
+
+    const name = `${student.full_name} ${student.last_name}`
+    const user = await this.createUser(name, createUserParentDto.email_address, "estudiante");
+
+    Object.assign(student, {userId: user.id, email_address: createUserParentDto.email_address, account: "creado"})
+
+    await this.studentRepository.save(student)
+
+    return student
   }
 
   findByOneEmail(email: string){

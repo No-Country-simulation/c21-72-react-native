@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, FlatList, Image, RefreshControl, Button, Pressable, ScrollView, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Pressable, ScrollView, TextInput, Alert, ActivityIndicator } from 'react-native';
 import Header from '@/components/Header';
-import { getTeacherByPage } from '@/actions/Director/get-teacher';
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {  useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigation, Link, useRouter } from 'expo-router';
 
 import { useFamilyStore } from '@/presentation/store/director/useFamilyStore';
@@ -12,13 +11,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { SkyBlueGradient } from '../ColorsGradient';
 import { ButtonLogin } from '../ui/Button';
 import { MyIcon } from '../ui/MyIcon';
-import { Teacher } from '@/domain/entities/teacher';
 import { Family } from '@/domain/entities/student';
 import { createStudent } from '@/actions/Director';
 
-import DateTimePicker from '@react-native-community/datetimepicker'
+
 import { DateTimePickerForm } from '../ui/RenderField';
 import { Student } from '../../../api/src/student/entities/student.entity';
+import Card from '../ui/Card';
+import { LoaderContainer } from '../ui/Loader';
 
 interface  Props {
   onBack: () => void;
@@ -26,20 +26,21 @@ interface  Props {
 
 const SudentScreen = ({onBack}: Props) => {
   const {family, clearFamily} = useFamilyStore()
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const programas = [
-    {label: 'Carrera 1', value: 'carrera 1'}, {label: 'Carrera 2', value: 'carrera 2'}
+    {label: 'Primero', value: 'Primero'}, {label: 'Segundo', value: 'Segundo'}, {label: 'Tercero', value: 'Tercero'}
   ];
 
   const salones = [
-    {label: 'A', value: 'A'}, {label: 'B', value: 'B'}
+    {label: 'A', value: 'A'}, {label: 'B', value: 'B'}, {label: 'C', value: 'C'}, {label: 'D', value: 'D'},{label: 'E', value: 'E'},
+    {label: 'F', value: 'F'},{label: 'G', value: 'G'}
   ];
 
   const { control, handleSubmit, formState: { errors } } = useForm<Family>();
 
   const mutation = useMutation({
+    
     mutationFn: (data: Family) =>
       createStudent({...data, family}),
     onSuccess(data: Student){
@@ -50,6 +51,7 @@ const SudentScreen = ({onBack}: Props) => {
   })
 
   const onSubmit = async (data: Family) => { 
+    console.log(data, "data--")
     if (family.length === 0) {
       Alert.alert('Error', 'Debe agregar al menos un familiar antes de continuar.');
       return; 
@@ -62,7 +64,6 @@ const SudentScreen = ({onBack}: Props) => {
       }
     });
   };
-
 
   const renderFormFields = () => (
     <View>
@@ -138,7 +139,7 @@ const SudentScreen = ({onBack}: Props) => {
         )}
         name="academic_year"
         rules={{ required: 'Este campo es obligatorio' }}
-        defaultValue=""
+        defaultValue={0}
       />
 
       
@@ -186,8 +187,14 @@ const SudentScreen = ({onBack}: Props) => {
           />
         )}
         name="email_address"
-        rules={{ required: 'Este campo es obligatorio' }}
-        defaultValue=""
+        rules={{
+          // required: 'Este campo es obligatorio',
+          pattern: {
+            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            message: 'El formato del email es incorrecto'
+          }
+        }}
+        defaultValue={undefined}
       />
       {errors.email_address && typeof errors.email_address.message === 'string' &&  (
         <Text style={styles.error}>{errors.email_address.message}</Text>
@@ -220,7 +227,7 @@ const SudentScreen = ({onBack}: Props) => {
       >
         
         <FormInputDropdown
-          name="programa"
+          name="grado"
           placeholder="Seleccione grado escolar"
           control={control}
           options={programas}
@@ -244,22 +251,24 @@ const SudentScreen = ({onBack}: Props) => {
         /> 
       </View>
     </View>
-  )
+  );
 
   const renderFamilyList = () => (
     <View>
       {family.length > 0 && (
         <View>
-          <Text>Familiares</Text>
+          <Text style={styles.staffName}>Familiares</Text>
           {family.map((member, index) => (
             <View key={index} style={styles.staffItem}>
-              <Text style={styles.staffName}>Id: {member.personId}</Text>
-              <Text style={styles.staffName}>Nombre: {member.full_name}</Text>
-              <Text style={styles.staffName}>Apellido: {member.last_name}</Text>
-              <Text style={styles.staffName}>Email: {member.email_address}</Text>
-              <Text style={styles.staffName}>Dirección: {member.address}</Text>
-              <Text style={styles.staffName}>Genero: {member.male}</Text>
-              <Text style={styles.staffName}>Parentesco: {member.type}</Text> 
+              <Card key={index}>
+                <Text style={styles.staffName}>Id: {member.personId}</Text>
+                <Text style={styles.staffName}>Nombre: {member.full_name}</Text>
+                <Text style={styles.staffName}>Apellido: {member.last_name}</Text>
+                <Text style={styles.staffName}>Email: {member.email_address}</Text>
+                <Text style={styles.staffName}>Dirección: {member.address}</Text>
+                <Text style={styles.staffName}>Genero: {member.male}</Text>
+                <Text style={styles.staffName}>Parentesco: {member.type}</Text>
+              </Card>
 
             </View>
           ))}
@@ -267,7 +276,6 @@ const SudentScreen = ({onBack}: Props) => {
       )}
     </View>
   );
-
 
   useEffect(() => {
     clearFamily();
@@ -279,67 +287,70 @@ const SudentScreen = ({onBack}: Props) => {
         title="Nuevo Estudiante"
         onBack={onBack}
       />
-      {/* <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}> */}
-        <View style={styles.container} >
-          <FlatList
-            data={[]}
-            keyExtractor={() => 'Student'}
-            renderItem={() => null}
-            ListHeaderComponent={renderFormFields}
-            ListFooterComponent={() => (
-              
-              <View style={{ marginLeft: 20,
-                marginRight:20,
-                marginTop: 15}}>
-
-                  <SkyBlueGradient>
-                    <Link 
-                      href="director/student/AddFamilyMember" 
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'transparent',
-                        paddingVertical: 10,
-                        paddingHorizontal: 20,
-                        borderRadius: 10,
-                      }}
-                    >
-                      <Pressable>
-                        <Text style={{color: '#fff',}}>Agregar familiar</Text>
-                      </Pressable>
-                    </Link>
-                
-                  </SkyBlueGradient>
-                
-                  {renderFamilyList()}
-
-
-                <ButtonLogin
-                  onPress={handleSubmit(onSubmit)}
-                  IconComponent={<MyIcon name="arrow-forward-outline" color="white" />}
-                  text='Enviar'
-                  disabled={mutation.isPending}
-                />
-
-                {loading && (
-                  <View style={styles.loaderContainer}>
-                    <ActivityIndicator size="large" color="#0000ff" />
-                  </View>
-                )}
-                
-              </View>
-            )} 
-          />
-
+      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.detailsContainer}>
+          {renderFormFields()} 
+          <View style={{ marginLeft: 20,
+            marginRight:20,
+            marginTop: 15}}
+          >
+            <SkyBlueGradient>
+              <Link 
+                href="director/student/AddFamilyMember" 
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'transparent',
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <Pressable>
+                  <Text style={{color: '#fff',}}>Agregar familiar</Text>
+                </Pressable>
+              </Link>
+            </SkyBlueGradient>
           
-          
+            {renderFamilyList()}
+
+            <ButtonLogin
+              onPress={handleSubmit(onSubmit)}
+              IconComponent={<MyIcon name="arrow-forward-outline" color="white" />}
+              text='Enviar'
+              disabled={mutation.isPending}
+            />
+
+            {loading && (
+              <LoaderContainer />
+            )}
+          </View>
         </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#3b5998',
+  },
+
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  detailsContainer: {
+    backgroundColor: '#fff',
+    padding: 16,
+  },
+
   label: {
     marginTop: 10,
     fontSize: 16,
@@ -353,16 +364,7 @@ const styles = StyleSheet.create({
     marginRight:20,
     borderBottomWidth: 1,
   },
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#3b5998',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    flexGrow: 1,
-    justifyContent: 'space-between',
-  },
+  
   staffItem: {
     padding: 16,
     borderBottomWidth: 1,
@@ -372,50 +374,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  staffRole: {
-    fontSize: 14,
-    color: '#666',
-  },
-  
-  contentContainer:{
-    backgroundColor: '#0F56B3',
-    position: 'absolute',
-    bottom: 10,
-    right: 20,
-    borderRadius: 50
-  },
-  iconContainer: {
-    width:50,
-    height:50,
-    justifyContent: 'center',
-    alignItems:'center'
-  },
-  icon:{
-    width:26,
-    height:26
-  },
-  
   error: {
     color: 'red',
     marginBottom: 10,
   },
 
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
-  },
-
-  loaderContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    zIndex: 2,
-  },
+ 
+  
 });
 
 

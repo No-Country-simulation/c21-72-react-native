@@ -9,6 +9,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { TeacherModule } from './teacher/teacher.module';
 import { StudentModule } from './student/student.module';
 import { ResponsibleModule } from './responsible/responsible.module';
+import { DirectorModule } from './director/director.module';
 
 
 @Module({
@@ -47,6 +48,7 @@ import { ResponsibleModule } from './responsible/responsible.module';
     TeacherModule,
     StudentModule,
     ResponsibleModule,
+    DirectorModule,
   ],
   controllers: [],
   providers: [],

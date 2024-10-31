@@ -49,20 +49,20 @@ export class AuthService {
             throw new UnauthorizedException('Contraseña incorrecta');
         }
 
-        const payload = { email: user.email };
+        const payload = { email: user.email, name: user.name };
         const rol = user.rol;
         // const token = await this.jwtService.signAsync(payload);
         // const refreshToken = await this.jwtService.signAsync(payload, this.refreshTokenConfig)
         const {access_token, refresh_token} = await this.generateTokens(payload)
 
 
-        return {access_token, refresh_token, email, rol, message: 'Login Successful'};
+        return {access_token, refresh_token, rol, message: 'Login Successful', user: {name: user.name, email: email}};
     }
     
     async refreshToken(refreshToken: string){
         try {
             const user = this.jwtService.verify(refreshToken, {secret: this.refreshTokenConfig.secret})
-            const payload = {email: user.email}
+            const payload = {email: user.email, name: user.name}
             const {access_token, refresh_token} = await this.generateTokens(payload)
 
             return {
@@ -71,6 +71,7 @@ export class AuthService {
                 email: user.email,
                 rol: user.rol,
                 status: 200,
+                user: user.name,
                 message: 'Refresh token correctamente'
             }
 
@@ -81,7 +82,7 @@ export class AuthService {
     
 
     private async generateTokens(user): Promise<Tokens>{
-        const jwtPayload = {email: user.email}
+        const jwtPayload = {email: user.email, name: user.name}
 
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(jwtPayload),

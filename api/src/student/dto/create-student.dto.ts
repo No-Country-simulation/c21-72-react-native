@@ -49,7 +49,7 @@ export class CreateStudentDto {
 
     @IsString()
     @IsNotEmpty()
-    academic_year: string;
+    academic_year: number;
 
     @IsString()
     @IsNotEmpty()
@@ -65,7 +65,7 @@ export class CreateStudentDto {
 
     @IsString()
     @IsNotEmpty()
-    programa: string;
+    grado: string;
 
     @IsString()
     @IsNotEmpty()

@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserParentDto } from './dto/create-user-parent.dto';
+import { RequestUserParentDto } from './dto/request-user-parent.dto';
 
 @Controller('users')
 export class UsersController {
@@ -10,6 +12,16 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @Post('parent')
+  requestParent(@Body() requestUserParentDto: RequestUserParentDto) {
+    return this.usersService.requestUserParent(requestUserParentDto);
+  }
+
+  @Post('parentcreate')
+  createParent(@Body() createUserParentDto: CreateUserParentDto) {
+    return this.usersService.createUserParent(createUserParentDto);
   }
 
   @Get()

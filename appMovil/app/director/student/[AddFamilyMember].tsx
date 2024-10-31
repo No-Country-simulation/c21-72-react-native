@@ -184,7 +184,7 @@ export default function AddFamilyMember() {
 
         {/* Type family */}
 
-        <Text style={styles.label}>Grado Escolar</Text>
+        <Text style={styles.label}>Parentesco</Text>
         <View style={{
           marginLeft: 20,
           marginRight:20,

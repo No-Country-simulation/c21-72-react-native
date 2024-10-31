@@ -53,6 +53,7 @@ export const useAuthStore = create<AuthState>()((set,get) => ({
   checkStatus: async () => {
     try {
       const resp = await authCheckStatus();
+      console.log(resp, "-----")
       if (!resp) {
         set({ status: 'unauthenticated', access_token: undefined, refresh_token: undefined, user: undefined, rol: undefined });
         return;
