@@ -26,7 +26,29 @@ export default function Page() {
     'Eracake': require('../assets/fonts/Eracake.ttf'),
   });
 
+  // Crear todos los estilos animados fuera del render
+  const logoAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: logoTranslateX.value }],
+    opacity: logoOpacity.value,
+  }));
+
+  // Crear los estilos de las letras
+  const letterAnimatedStyles = letterAnimations.map((anim) =>
+    useAnimatedStyle(() => ({
+      transform: [{ translateY: anim.value }],
+    }))
+  );
+
+  // Crear el estilo del número 2
+  const twoAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: twoAnimation.value },
+      { rotate: '20deg' },
+    ],
+  }));
+
   useEffect(() => {
+    // Animaciones existentes...
     logoTranslateX.value = withSequence(
       withTiming(40, { duration: 500, easing: Easing.inOut(Easing.ease) }),
       withTiming(0, { duration: 500, easing: Easing.inOut(Easing.ease) })
@@ -44,16 +66,14 @@ export default function Page() {
       700,
       withSpring(0, { damping: 5, stiffness: 100 })
     );
+
+    // Agregar navegación automática
+    const timer = setTimeout(() => {
+      router.replace('/auth/LoginScreen');
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
-
-  const logoAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: logoTranslateX.value }],
-    opacity: logoOpacity.value,
-  }));
-
-  const handleNext = () => {
-    router.push('/auth/LoginScreen');
-  };
 
   if (!fontsLoaded) {
     return null;
@@ -77,35 +97,18 @@ export default function Page() {
           {'CONECTA'.split('').map((letter, index) => (
             <Animated.Text
               key={index}
-              style={[
-                styles.title,
-                useAnimatedStyle(() => ({
-                  transform: [{ translateY: letterAnimations[index].value }],
-                })),
-              ]}
+              style={[styles.title, letterAnimatedStyles[index]]}
             >
               {letter}
             </Animated.Text>
           ))}
           <Animated.Text
-            style={[
-              styles.title,
-              styles.rotatedTwo,
-              useAnimatedStyle(() => ({
-                transform: [
-                  { translateY: twoAnimation.value },
-                  { rotate: '20deg' },
-                ],
-              })),
-            ]}
+            style={[styles.title, styles.rotatedTwo, twoAnimatedStyle]}
           >
             2
           </Animated.Text>
         </View>
         <Text style={styles.subtitle}>Bienvenido a tu app escolar</Text>
-        <TouchableOpacity style={styles.button} onPress={handleNext}>
-          <Text style={styles.buttonText}>Comenzar</Text>
-        </TouchableOpacity>
       </View>
       <Image
         source={require('@/assets/images/FooterImage.png')}
