@@ -1,19 +1,15 @@
-//import { ENV } from '@/config/env';
+import { ENV } from "@/config/env";
 import axios from "axios";
 import { StorageAdapter } from "@/config/adapters/storage-adapters";
 import { useRouter } from "expo-router";
 import { Platform } from "react-native";
 
-// Comenta o modifica esta sección
-// export const API_URL =
-//   ENV.STAGE === "prod"
-//     ? ENV.API_URL
-//     : Platform.OS === "ios"
-//     ? ENV.API_URL_IOS
-//     : ENV.API_URL_ANDROID;
-
-// En su lugar, usa una URL hardcodeada temporalmente
-export const API_URL = "https://tu-api-temporal.com";
+export const API_URL =
+  ENV.STAGE === "prod"
+    ? ENV.API_URL // URL de producción
+    : Platform.OS === "ios"
+    ? ENV.API_URL_IOS // URL de desarrollo para iOS
+    : ENV.API_URL_ANDROID; // URL de desarrollo para Android
 
 const connectionApi = axios.create({
   baseURL: API_URL,

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "appMovil",
-    "slug": "appMovil",
+    "name": "School App",
+    "slug": "school-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -13,18 +13,19 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.schoolapp"
     },
     "android": {
+      "package": "com.yourcompany.schoolapp",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      },
+      "permissions": [
+        "INTERNET"
+      ]
     },
     "plugins": [
       "expo-router"
@@ -32,21 +33,13 @@
     "experiments": {
       "typedRoutes": true
     },
-    "packagerOpts": {
-      "config": "metro.config.js",
-      "sourceExts": [
-        "expo.ts",
-        "expo.tsx",
-        "expo.js",
-        "expo.jsx",
-        "ts",
-        "tsx",
-        "js",
-        "jsx",
-        "json",
-        "wasm",
-        "svg"
-      ]
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "367f6876-275a-4be9-a1ac-69ba776e1fba"
+      }
     }
   }
 }
